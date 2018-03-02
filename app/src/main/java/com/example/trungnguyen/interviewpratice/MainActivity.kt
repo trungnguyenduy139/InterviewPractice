@@ -88,4 +88,14 @@ class MainActivity : AppCompatActivity() {
         }
         println("Ahihi $a")
     }
+
+//    fun removeKFromList(list: ListNode<Int>?, removeValue: Int): ListNode<Int>? {
+//        while (true) {
+//            if (list?.value == removeValue) {
+//                list = list.next
+//                break
+//            }
+//        }
+//        return list
+//    }
 }

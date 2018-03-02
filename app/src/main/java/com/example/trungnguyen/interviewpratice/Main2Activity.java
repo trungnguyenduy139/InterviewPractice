@@ -2,9 +2,12 @@ package com.example.trungnguyen.interviewpratice;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Main2Activity extends AppCompatActivity {
@@ -13,7 +16,20 @@ public class Main2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        rotateImage(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+//        rotateImage(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+        boolean isValid = isCryptSolution(new String[]{"WASD", "IJKL", "OPAS"}, new char[][]{
+                {'W', '2'},
+                {'A', '0'},
+                {'S', '4'},
+                {'D', '1'},
+                {'I', '5'},
+                {'J', '8'},
+                {'K', '6'},
+                {'L', '3'},
+                {'O', '7'},
+                {'P', '9'}});
+
+        Log.v(Main2Activity.class.getSimpleName(), "Ahhiih output: " + isValid);
     }
 
     int[][] rotateImage(int[][] a) {
@@ -71,5 +87,62 @@ public class Main2Activity extends AppCompatActivity {
                 rowHashSet.clear();
         }
         return true;
+    }
+
+    boolean isCryptSolution(String[] crypt, char[][] solution) {
+        Map<Character, Character> characterMap = new HashMap<>();
+        String[] cryptArray = new String[crypt.length];
+        for (int cryptIndex = 0; cryptIndex < crypt.length; cryptIndex++) {
+            cryptArray[cryptIndex] = "";
+            for (int strIndex = 0; strIndex < crypt[cryptIndex].length(); strIndex++) {
+                char tmpChar = crypt[cryptIndex].charAt(strIndex);
+                if (characterMap.containsKey(tmpChar)) {
+                    cryptArray[cryptIndex] += characterMap.get(tmpChar);
+                } else {
+                    for (char[] solutionElement : solution) {
+                        char key = solutionElement[0];
+                        char value = solutionElement[1];
+                        if (tmpChar == key) {
+                            cryptArray[cryptIndex] += value;
+                        }
+                        if (!characterMap.containsValue(tmpChar)) {
+                            characterMap.put(key, value);
+                        }
+                    }
+                }
+            }
+        }
+        if ((cryptArray[0].charAt(0) == '0' && (cryptArray[0].length() > 1))
+                || (cryptArray[1].charAt(0) == '0' && (cryptArray[1].length() > 1))
+                || (cryptArray[2].charAt(0) == '0' && (cryptArray[2].length() > 1))) return false;
+        else
+            return Long.parseLong(cryptArray[0]) + Long.parseLong(cryptArray[1]) == Long.parseLong(cryptArray[2]);
+    }
+
+    class ListNode<T> {
+        ListNode(T x) {
+            value = x;
+        }
+
+        T value;
+        ListNode<T> next;
+    }
+
+    ListNode<Integer> removeKFromList(ListNode<Integer> list, int removeValue) {
+        ListNode<Integer> copiedList = list;
+        ListNode<Integer> prevList = null;
+        while (copiedList != null) {
+            if (copiedList.value == removeValue) {
+                if (prevList != null) {
+                    prevList.next = copiedList.next;
+                } else {
+                    list = copiedList.next;
+                }
+            } else {
+                prevList = copiedList;
+            }
+            copiedList = copiedList.next;
+        }
+        return list;
     }
 }
